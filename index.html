@@ -1,6 +1,11 @@
 <!DOCTYPE html><!DOCTYPE html>
 <html lang="uz">
 <head>
+   <script>
+    if (!/Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)) {
+  window.location.href = "https://unicorner.uz"; // Redirect desktop/tablet users
+}
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Unicorner Times</title>
@@ -349,6 +354,7 @@
   </script>
 </body>
 </html>
+
 
 
 
