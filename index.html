@@ -1,26 +1,11 @@
 <!DOCTYPE html><!DOCTYPE html>
 <html lang="uz">
 <head>
-   <script>
-  function isPhone() {
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-
-    // iPhone
-    if (/iPhone/i.test(ua)) return true;
-
-    // Android phones (Android + Mobile keyword)
-    if (/Android/i.test(ua) && /Mobile/i.test(ua)) return true;
-
-    // Windows Phone
-    if (/Windows Phone/i.test(ua)) return true;
-
-    return false; // everything else = tablet or desktop
-  }
-
-  if (!isPhone()) {
-    window.location.href = "https://unicorner.uz"; 
-  }
-</script>
+   <script>  
+    if (!/Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)) {  
+  window.location.href = "https://unicorner.uz"; // Redirect desktop/tablet users  
+}  
+   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Unicorner Times</title>
@@ -369,6 +354,7 @@
   </script>
 </body>
 </html>
+
 
 
 
