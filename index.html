@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="uz">
 <head>
   <meta charset="UTF-8" />
@@ -12,6 +12,30 @@
       background: #fff;
       color: #222;
       line-height: 1.6;
+    }
+
+    /* Splash Screen */
+    #splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #333;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1.2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* Navbar */
@@ -207,6 +231,11 @@
 </head>
 
 <body>
+  <!-- Splash Screen -->
+  <div id="splash">
+    <div class="loader"></div>
+  </div>
+
   <!-- Popup -->
   <div class="overlay" id="popupOverlay">
     <div class="popup">
@@ -216,62 +245,72 @@
     </div>
   </div>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <a href="#" class="logo">The Unicorner Times</a>
-    </div>
-    <div class="nav-right" id="nav-links">
-      <a href="https://unicorner.uz/about.html">About</a>
-      <a href="https://book.unicorner.uz">Books</a>
-      <a href="https://research.unicorner.uz">Research</a>
-      <a href="https://article.unicorner.uz">Articles</a>
-      <a href="https:publish.unicorner.uz">Publish</a>
-    </div>
-    <div class="menu-btn" id="menu-btn">&#9776;</div>
-  </nav>
+  <!-- Main Content -->
+  <div id="content" style="display:none;">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="#" class="logo">The Unicorner Times</a>
+      </div>
+      <div class="nav-right" id="nav-links">
+        <a href="https://unicorner.uz/about.html">About</a>
+        <a href="https://book.unicorner.uz">Books</a>
+        <a href="https://research.unicorner.uz">Research</a>
+        <a href="https://article.unicorner.uz">Articles</a>
+        <a href="https://publish.unicorner.uz">Publish</a>
+      </div>
+      <div class="menu-btn" id="menu-btn">&#9776;</div>
+    </nav>
 
-  <!-- Hero -->
-  <header class="hero">
-    <h1 class="hero-title">Welcome to The Unicorner Times</h1>
-    <p class="hero-subtitle">Articles, Research Papers, Narratives - All in one.</p>
-    <form class="subscribe-form">
-      <input type="email" placeholder="Submit you email" required />
-      <button type="submit">Proceed</button>
-    </form>
-  </header>
+    <!-- Hero -->
+    <header class="hero">
+      <h1 class="hero-title">Welcome to The Unicorner Times</h1>
+      <p class="hero-subtitle">Articles, Research Papers, Narratives - All in one.</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Submit your email" required />
+        <button type="submit">Proceed</button>
+      </form>
+    </header>
 
-  <!-- Carousel -->
-  <div class="carousel">
-    <div class="slides">
-      <img src="images/economics.jpg" class="slide active">
-      <img src="images/images.jpg" class="slide">
-      <img src="images/book3.jpg" class="slide">
+    <!-- Carousel -->
+    <div class="carousel">
+      <div class="slides">
+        <img src="images/economics.jpg" class="slide active">
+        <img src="images/images.jpg" class="slide">
+        <img src="images/book3.jpg" class="slide">
+      </div>
     </div>
+
+    <!-- Blog -->
+    <main class="blog-container" id="blog-container"></main>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 All Rights Reserved</p>
+    </footer>
   </div>
 
-  <!-- Blog -->
-  <main class="blog-container" id="blog-container"></main>
-
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 All Rights Reserved</p>
-  </footer>
-
   <script>
-    // Popup
+    // Splash screen
     window.addEventListener("load", () => {
-      document.getElementById("popupOverlay").style.display = "flex";
+      setTimeout(() => {
+        document.getElementById("splash").style.display = "none";
+        document.getElementById("content").style.display = "block";
+        // Show popup after splash
+        document.getElementById("popupOverlay").style.display = "flex";
+      }, 1500); // 1.5 sec splash
     });
+
+    // Popup
     function closePopup() {
       document.getElementById("popupOverlay").style.display = "none";
     }
 
     // Blog posts
     const posts = [
-      { title: "How Small Habits Change Your Life", description: "Big results come from small daily improvements. Here's why.", content: "ø", link: "econ.html" },
-      { title: "Why Simplicity Wins", description: "Less is often more.", content: "Simplicity removes distractions...", link: "#" },
-      { title: "The Power of Consistency", description: "Consistency beats intensity.", content: "Real change comes from doing it repeatedly...", link: "#" }
+      { title: "How Small Habits Change Your Life", description: "Big results come from small daily improvements. Here's why.", link: "econ.html" },
+      { title: "Why Simplicity Wins", description: "Less is often more.", link: "#" },
+      { title: "The Power of Consistency", description: "Consistency beats intensity.", link: "#" }
     ];
     const container = document.getElementById("blog-container");
     function showPosts() {
@@ -310,7 +349,5 @@
   </script>
 </body>
 </html>
-
-
 
 
