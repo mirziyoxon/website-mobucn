@@ -311,7 +311,7 @@
 }
 
 
-     .telegram-banner {
+ .telegram-banner {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -327,23 +327,15 @@
   animation: slideUp 0.4s ease;
 }
 
-.telegram-banner span {
-  font-size: 15px;
-  color: #000;
-}
-
 .telegram-banner a {
-  background: #0088cc;
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 6px;
+  font-size: 15px;
+  color: #0088cc;
   font-weight: bold;
   text-decoration: none;
-  margin-left: 10px;
 }
 
 .telegram-banner a:hover {
-  background: #0077b5;
+  text-decoration: underline;
 }
 
 .telegram-banner .close-btn {
@@ -390,10 +382,12 @@
 
    <!-- Telegram Banner -->
 <div class="telegram-banner" id="telegramBanner" style="display:none;">
-  <span>📢 Bizning yangiliklardan xabardor bo‘ling!</span>
-  <a href="https://t.me/unicorner_times" target="_blank">Telegram</a>
+  <a href="https://t.me/yourchannel" target="_blank">
+    📢 Bizning yangiliklardan xabardor bo‘ling!
+  </a>
   <button class="close-btn" onclick="document.getElementById('telegramBanner').style.display='none'">✕</button>
 </div>
+
 
    
   <!-- Main Content -->
@@ -550,11 +544,12 @@ window.addEventListener("load", function() {
   window.addEventListener("load", function() {
     setTimeout(function() {
       document.getElementById("telegramBanner").style.display = "flex";
-    }, 2500); // 8000ms = 6.2 sekund
+    }, 8000); // 2.5 sekund
   });
   </script>
 </body>
 </html>
+
 
 
 
