@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+   <script>  
+    if 4(!/Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)) {  
+      window.location.href = "https://unicorner.uz"; // Redirect desktop/tablet users  
+    }  
+   </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Unicorner Times</title>
+  <style>
+    body {
+      font-family: "Arial", "Helvetica Neue", sans-serif;
+      margin: 0;
+      background: #fff;
+      color: #222;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Background dots */
+    #dotsBackground {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(0,0,0,0.1) 2px, transparent 2px);
+      background-size: 40px 40px;
+      z-index: -1;
+      animation: moveDots 10s linear infinite;
+    }
+    @keyframes moveDots {
+      from { background-position: 0 0; }
+      to { background-position: 40px 40px; }
+    }
+
+    /* Splash Screen */
+    #splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #333;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1.2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+      background: #fff;
+      position: relative;
+      z-index: 10;
+    }
+    .logo {
+      font-family: "Brush Script MT", cursive;
+      font-size: 28px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    .logo:hover {
+      color: #ff6600;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 20px;
+    }
+    .nav-right a {
+      text-decoration: none;
+      color: black;
+      font-size: 1rem;
+    }
+    .nav-right a:hover {
+      text-decoration: underline;
+    }
+
+    /* Hamburger button */
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .menu-btn span {
+      width: 25px;
+      height: 3px;
+      background: #333;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* Mobile menu (hidden by default) */
+    @media (max-width: 768px) {
+      .menu-btn {
+        display: flex;
+      }
+      .nav-right {
+        position: fixed;
+        top: 0;
+        left: -250px; /* hidden */
+        width: 200px;
+        height: 100%;
+        background: white;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        flex-direction: column;
+        padding: 60px 20px;
+        transition: left 0.3s ease;
+        z-index: 999;
+      }
+      .nav-right.show {
+        left: 0; /* slide in */
+      }
+      .nav-right a {
+        margin: 10px 0;
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Hero */
+    .hero {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 80px 20px 50px;
+    }
+    .hero-title {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+    .hero-subtitle {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    .subscribe-form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .subscribe-form input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      flex: 1;
+      max-width: 250px;
+    }
+    .subscribe-form button {
+      padding: 10px 18px;
+      font-size: 1rem;
+      background: #000;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .subscribe-form button:hover {
+      background: #333;
+    }
+
+    /* Blog */
+    .blog-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      position: relative;
+      z-index: 5;
+    }
+    .post {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    .post:hover {
+      background: #fafafa;
+    }
+    .post h2 {
+      margin-bottom: 10px;
+      font-size: 1.4rem;
+    }
+    .post p {
+      color: #555;
+      font-size: 1rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #fafafa;
+      font-size: 0.9rem;
+      color: #777;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Popup */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .popup {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    .popup h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: #333;
+    }
+    .popup p {
+      font-size: 1rem;
+      color: #555;
+    }
+    .popup button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .popup button:hover {
+      background: #000;
+    }
+
+    /* Carousel */
+    .carousel {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      margin: 20px auto;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    .slides {
+      display: flex;
+      transition: transform 0.8s ease;
+    }
+    .slide {
+      min-width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Animated Dots Background -->
+  <div id="dotsBackground"></div>
+
+  <!-- Splash Screen -->
+  <div id="splash">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Popup -->
+  <div class="overlay" id="popupOverlay">
+    <div class="popup">
+      <h2>NOTICE!</h2>
+      <p>We no longer encourage you to sign in/up. As a loyal open-source, we contribute community workshop.</p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="content" style="display:none;">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="#" class="logo">The Unicorner Times</a>
+      </div>
+
+      <!-- Hamburger button -->
+      <div class="menu-btn" id="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav-right" id="nav-links">
+        <a href="https://unicorner.uz/about/">About</a>
+        <a href="https://book.unicorner.uz">Books</a>
+        <a href="https://research.unicorner.uz">Research</a>
+        <a href="https://article.unicorner.uz">Articles</a>
+        <a href="https://publish.unicorner.uz">Publish</a>
+        <a href="#">EN</a>
+        <a href="https://local.unicorner.uz">UZ</a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+      <h1 class="hero-title">Welcome to The-Unicorner-Times</h1>
+      <p class="hero-subtitle">Articles, Research Papers, Narratives - All in one.</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Submit your email" required />
+        <button type="submit">Proceed</button>
+      </form>
+    </header>
+
+    <!-- Carousel -->
+    <div class="carousel">
+      <div class="slides">
+        <img src="images/economics.jpg" class="slide active">
+        <img src="images/images.jpg" class="slide">
+        <img src="images/book3.jpg" class="slide">
+      </div>
+    </div>
+
+    <!-- Blog -->
+    <main class="blog-container" id="blog-container"></main>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 All Rights Reserved</p>
+    </footer>
+  </div>
+
+  <script>
+    // Splash screen
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("splash").style.display = "none";
+        document.getElementById("content").style.display = "block";
+        document.getElementById("popupOverlay").style.display = "flex";
+      }, 1500);
+    });
+
+    // Popup
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+
+    // Blog posts
+    const posts = [
+      { title: "How Small Habits Change Your Life", description: "Big results come from small daily improvements. Here's why.", link: "econ.html" },
+      { title: "Why Simplicity Wins", description: "Less is often more.", link: "#" },
+      { title: "The Power of Consistency", description: "Consistency beats intensity.", link: "#" }
+    ];
+    const container = document.getElementById("blog-container");
+    function showPosts() {
+      container.innerHTML = "";
+      posts.forEach(post => {
+        const div = document.createElement("div");
+        div.className = "post";
+        div.innerHTML = `
+          <h2>${post.title}</h2>
+          <p>${post.description}</p>
+          <a href="${post.link}" class="read-more">Read more</a>
+        `;
+        container.appendChild(div);
+      });
+    }
+    showPosts();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById("menu-btn");
+    const navLinks = document.getElementById("nav-links");
+    menuBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("show");
+    });
+
+    // Carousel
+    let index = 0;
+    const slides = document.querySelectorAll(".slide");
+    function showSlide() {
+      slides.forEach((s,i) => {
+        s.style.display = (i === index) ? "block" : "none";
+      });
+      index = (index + 1) % slides.length;
+    }
+    showSlide();
+    setInterval(showSlide, 3000);
+  </script>
+</body>
+</html>
