@@ -407,23 +407,30 @@
     }
 
 
-     var modal = document.getElementById("promoModal");
-var closeBtn = document.querySelector("#promoModal .close");
+     const modal = document.getElementById("promoModal");
+  const closeBtn = document.querySelector("#promoModal .close");
 
-// Banner ko'rsatish funksiyasi
-function showBanner() {
-  modal.style.display = "flex";
-}
+  // Yopish funksiyasi
+  function closeBanner() {
+    modal.style.display = "none";
+    localStorage.setItem("bannerShownTime", Date.now()); // vaqtni saqlash
+  }
 
-// Yopish funksiyasi
-function closeBanner() {
-  modal.style.display = "none";
-  // LocalStorage ga vaqt yozib qo'yamiz
-  localStorage.setItem("bannerShownTime", Date.now());
-}
+  // Sahifa yuklanganda
+  window.addEventListener("load", () => {
+    const lastShown = localStorage.getItem("bannerShownTime");
+    const now = Date.now();
+    const oneHour = 60 * 60 * 1000; // 1 soat millisekundlarda
 
-// Yopish tugmasi bosilganda
-closeBtn.onclick = closeBanner;
+    if (!lastShown || now - lastShown > oneHour) {
+      modal.style.display = "flex"; // banner ochiladi
+    }
+  });
+
+  // Tugma bosilganda yopish
+  closeBtn.onclick = closeBanner;
+
+     
 
 // Sahifa yuklanganda tekshir
 window.addEventListener("load", function() {
@@ -480,6 +487,7 @@ window.addEventListener("load", function() {
   </script>
 </body>
 </html>
+
 
 
 
