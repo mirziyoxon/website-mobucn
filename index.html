@@ -410,15 +410,31 @@
      var modal = document.getElementById("promoModal");
 var closeBtn = document.querySelector("#promoModal .close");
 
-// Sahifa ochilganda ko‘rinadi
-window.addEventListener("load", function() {
+// Banner ko'rsatish funksiyasi
+function showBanner() {
   modal.style.display = "flex";
-});
+}
+
+// Yopish funksiyasi
+function closeBanner() {
+  modal.style.display = "none";
+  // LocalStorage ga vaqt yozib qo'yamiz
+  localStorage.setItem("bannerShownTime", Date.now());
+}
 
 // Yopish tugmasi bosilganda
-closeBtn.onclick = function() {
-  modal.style.display = "none";
-};
+closeBtn.onclick = closeBanner;
+
+// Sahifa yuklanganda tekshir
+window.addEventListener("load", function() {
+  var lastShown = localStorage.getItem("bannerShownTime");
+  var now = Date.now();
+  var oneHour = 60 * 60 * 1000; // 1 soat millisekundda
+
+  if (!lastShown || now - lastShown > oneHour) {
+    showBanner();
+  }
+});
 
      
     // Blog posts
@@ -464,5 +480,6 @@ closeBtn.onclick = function() {
   </script>
 </body>
 </html>
+
 
 
