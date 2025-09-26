@@ -273,6 +273,42 @@
     .slide {
       min-width: 100%;
     }
+
+     
+     /* To‘liq ekran fon */
+#promoModal {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9); /* qora fon */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Banner rasmi */
+#promoModal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+/* Yopish tugmasi */
+#promoModal .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+#promoModal .close:hover {
+  color: red;
+}
   </style>
 </head>
 
@@ -284,6 +320,12 @@
   <div id="splash">
     <div class="loader"></div>
   </div>
+
+   <!-- Fullscreen Banner -->
+<div id="promoModal">
+  <span class="close">&times;</span>
+  <img src="images/times.jpg" alt="Promo Banner">
+</div>
 
   <!-- Popup -->
   <div class="overlay" id="popupOverlay">
@@ -364,6 +406,21 @@
       document.getElementById("popupOverlay").style.display = "none";
     }
 
+
+     var modal = document.getElementById("promoModal");
+var closeBtn = document.querySelector("#promoModal .close");
+
+// Sahifa ochilganda ko‘rinadi
+window.addEventListener("load", function() {
+  modal.style.display = "flex";
+});
+
+// Yopish tugmasi bosilganda
+closeBtn.onclick = function() {
+  modal.style.display = "none";
+};
+
+     
     // Blog posts
     const posts = [
       { title: "How Small Habits Change Your Life", description: "Big results come from small daily improvements. Here's why.", link: "econ.html" },
@@ -407,4 +464,5 @@
   </script>
 </body>
 </html>
+
 
