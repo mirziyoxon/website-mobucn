@@ -417,9 +417,9 @@
 
    <!-- Fullscreen Banner -->
 
-   <div id="promoModal">
-  <span class="close" onclick="closePromo()">&times;</span>
-  <img src="images/reklama0.png" alt="Promo">
+   <div id="promoModal" onclick="redirectPromo()">>
+  <span class="close" onclick="event.stopPropagation(); closePromo();">&times;</span>
+   <img src="images/reklama0.png" alt="Promo">
 </div>
 
   <!-- Popup -->
@@ -646,9 +646,14 @@ function closePromo() {
 window.addEventListener('load', () => {
   setTimeout(showPromo, 3825);
 });
+     function redirectPromo() {
+  window.location.href = "https://vaqf.uz"; // change link if needed
+}
+
   </script>
 </body>
 </html>
+
 
 
 
