@@ -551,34 +551,37 @@ window.addEventListener("load", function() {
 
 
 
-     const popupDelay = 20 * 60 * 1000; // 20 minutes in ms
-  const now = Date.now();
+     document.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("popupOverlay");
+    const splash = document.getElementById("splash");
+    const content = document.getElementById("content");
 
-  // Check last time splash or popup shown
-  const lastShown = localStorage.getItem("unicornerPopupTime");
+    const popupDelay = 20 * 60 * 1000; // 20 minutes
+    const now = Date.now();
+    const lastShown = localStorage.getItem("unicornerPopupTime");
+    const shouldShow = !lastShown || now - lastShown > popupDelay;
 
-  const shouldShow = !lastShown || now - lastShown > popupDelay;
-
-  window.addEventListener("load", () => {
     if (shouldShow) {
-      // Mark time
-      localStorage.setItem("unicornerPopupTime", Date.now());
+      // record new time
+      localStorage.setItem("unicornerPopupTime", now);
 
-      // Show splash & popup normally after 1.5 sec
+      // show splash, then popup
       setTimeout(() => {
-        document.getElementById("splash").style.display = "none";
-        document.getElementById("content").style.display = "block";
-        document.getElementById("popupOverlay").style.display = "flex";
+        if (splash) splash.style.display = "none";
+        if (content) content.style.display = "block";
+        if (popup) popup.style.display = "flex";
       }, 1500);
     } else {
-      // Skip splash/popup if shown recently
-      document.getElementById("splash").style.display = "none";
-      document.getElementById("content").style.display = "block";
+      // skip popup entirely
+      if (splash) splash.style.display = "none";
+      if (content) content.style.display = "block";
+      if (popup) popup.style.display = "none";
     }
   });
   </script>
 </body>
 </html>
+
 
 
 
