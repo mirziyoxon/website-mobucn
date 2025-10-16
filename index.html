@@ -641,9 +641,15 @@ function closePromo() {
   const modal = document.getElementById('promoModal');
   modal.classList.remove('show');
 }
+
+// 🕐 Automatically show modal after 2 seconds
+window.addEventListener('load', () => {
+  setTimeout(showPromo, 2000);
+});
   </script>
 </body>
 </html>
+
 
 
 
