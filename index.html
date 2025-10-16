@@ -216,47 +216,75 @@
       z-index: 5;
     }
 
-    /* Popup */
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .popup {
-      background: #fff;
-      padding: 20px 30px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-    }
-    .popup h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      color: #333;
-    }
-    .popup p {
-      font-size: 1rem;
-      color: #555;
-    }
-    .popup button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #333;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .popup button:hover {
-      background: #000;
-    }
+    /* Popup (with animation) */
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.overlay.show {
+  display: flex;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.popup {
+  background: #fff;
+  padding: 25px 35px;
+  border-radius: 14px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  transform: scale(0.8);
+  opacity: 0;
+  animation: popupIn 0.6s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.popup h2 {
+  margin-top: 0;
+  font-size: 1.6rem;
+  color: #333;
+}
+
+.popup p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.popup button {
+  margin-top: 15px;
+  padding: 10px 22px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+.popup button:hover {
+  background: #000;
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popupIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
     /* Carousel */
     .carousel {
@@ -552,7 +580,7 @@ window.addEventListener("load", function() {
 
 
      document.addEventListener("DOMContentLoaded", () => {
-    const popup = document.getElementById("popupOverlay");
+    const popup = document.querySelector(".overlay");
     const splash = document.getElementById("splash");
     const content = document.getElementById("content");
 
@@ -562,17 +590,17 @@ window.addEventListener("load", function() {
     const shouldShow = !lastShown || now - lastShown > popupDelay;
 
     if (shouldShow) {
-      // record new time
       localStorage.setItem("unicornerPopupTime", now);
 
-      // show splash, then popup
       setTimeout(() => {
         if (splash) splash.style.display = "none";
         if (content) content.style.display = "block";
-        if (popup) popup.style.display = "flex";
+
+        setTimeout(() => {
+          if (popup) popup.classList.add("show");
+        }, 800);
       }, 1500);
     } else {
-      // skip popup entirely
       if (splash) splash.style.display = "none";
       if (content) content.style.display = "block";
       if (popup) popup.style.display = "none";
@@ -581,6 +609,7 @@ window.addEventListener("load", function() {
   </script>
 </body>
 </html>
+
 
 
 
