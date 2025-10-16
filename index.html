@@ -548,9 +548,38 @@ window.addEventListener("load", function() {
       document.getElementById("telegramBanner").style.display = "flex";
     }, 9000); // 2.5 sekund
   });
+
+
+
+     const popupDelay = 20 * 60 * 1000; // 20 minutes in ms
+  const now = Date.now();
+
+  // Check last time splash or popup shown
+  const lastShown = localStorage.getItem("unicornerPopupTime");
+
+  const shouldShow = !lastShown || now - lastShown > popupDelay;
+
+  window.addEventListener("load", () => {
+    if (shouldShow) {
+      // Mark time
+      localStorage.setItem("unicornerPopupTime", Date.now());
+
+      // Show splash & popup normally after 1.5 sec
+      setTimeout(() => {
+        document.getElementById("splash").style.display = "none";
+        document.getElementById("content").style.display = "block";
+        document.getElementById("popupOverlay").style.display = "flex";
+      }, 1500);
+    } else {
+      // Skip splash/popup if shown recently
+      document.getElementById("splash").style.display = "none";
+      document.getElementById("content").style.display = "block";
+    }
+  });
   </script>
 </body>
 </html>
+
 
 
 
