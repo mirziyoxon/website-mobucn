@@ -3,15 +3,309 @@
 <head>
   <script>
     if (!/Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)) {
-      window.location.href = "https://unicorner.uz";
+      window.location.href = "https://unicorner.uz"; // Redirect desktop/tablet users
     }
   </script>
   <script src="https://cdn.counter.dev/script.js" data-id="2bd8482e-fdd4-490b-aa13-72b92d89a41e" data-utcoffset="5"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Unicorner Times</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Arial", "Helvetica Neue", sans-serif;
+      margin: 0;
+      background: #fff;
+      color: #222;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Background dots */
+    #dotsBackground {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle, rgba(0,0,0,0.1) 2px, transparent 2px);
+      background-size: 40px 40px;
+      z-index: -1;
+      animation: moveDots 10s linear infinite;
+    }
+    @keyframes moveDots {
+      from { background-position: 0 0; }
+      to { background-position: 40px 40px; }
+    }
+
+    /* Splash Screen */
+    #splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #333;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1.2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+      background: #fff;
+      position: relative;
+      z-index: 10;
+    }
+    .logo {
+      font-family: "Brush Script MT", cursive;
+      font-size: 28px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    .logo:hover { color: #ff6600; }
+    .nav-right { display: flex; gap: 20px; }
+    .nav-right a { text-decoration: none; color: black; font-size: 1rem; }
+    .nav-right a:hover { text-decoration: underline; }
+
+    /* Hamburger button */
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .menu-btn span {
+      width: 25px;
+      height: 3px;
+      background: #333;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* Mobile menu */
+    @media (max-width: 768px) {
+      .menu-btn { display: flex; }
+      .nav-right {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 200px;
+        height: 100%;
+        background: white;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        flex-direction: column;
+        padding: 60px 20px;
+        transition: left 0.3s ease;
+        z-index: 999;
+      }
+      .nav-right.show { left: 0; }
+      .nav-right a { margin: 10px 0; font-size: 1.1rem; }
+    }
+
+    /* Hero */
+    .hero {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 80px 20px 50px;
+    }
+    .hero-title { font-size: 2.2rem; margin-bottom: 10px; }
+    .hero-subtitle { font-size: 1rem; color: #555; margin-bottom: 20px; }
+    .subscribe-form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .subscribe-form input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      flex: 1;
+      max-width: 250px;
+    }
+    .subscribe-form button {
+      padding: 10px 18px;
+      font-size: 1rem;
+      background: #000;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .subscribe-form button:hover { background: #333; }
+
+    /* Blog */
+    .blog-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      position: relative;
+      z-index: 5;
+    }
+    .post {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .post:hover { background: #fafafa; transform: translateY(-2px); }
+    .post h2 { margin-bottom: 10px; font-size: 1.4rem; }
+    .post p { color: #555; font-size: 1rem; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #fafafa;
+      font-size: 0.9rem;
+      color: #777;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Popup */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.8s ease forwards;
+    }
+    .overlay.show { display: flex; }
+    .popup {
+      background: #fff;
+      padding: 25px 35px;
+      border-radius: 14px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transform: scale(0.8);
+      opacity: 0;
+      animation: popupIn 0.6s ease forwards;
+      animation-delay: 0.3s;
+    }
+    .popup h2 { margin-top: 0; font-size: 1.6rem; color: #333; }
+    .popup p { font-size: 1rem; color: #555; }
+    .popup button {
+      margin-top: 15px;
+      padding: 10px 22px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+    .popup button:hover { background: #000; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popupIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+    /* Carousel */
+    .carousel {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      margin: 20px auto;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    .slides { display: flex; transition: transform 0.8s ease; }
+    .slide { min-width: 100%; }
+
+    /* Promo Modal */
+    #promoModal {
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      animation: fadeBackdrop 0.6s ease forwards;
+    }
+    #promoModal.show { display: flex; }
+    #promoModal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 14px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translateY(-80px);
+      animation: slideDown 0.9s ease forwards;
+    }
+    #promoModal .close {
+      position: absolute;
+      top: 20px; right: 30px;
+      font-size: 40px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    #promoModal .close:hover { color: #ff4040; }
+    @keyframes fadeBackdrop { from { background: rgba(0,0,0,0); } to { background: rgba(0,0,0,0.8); } }
+    @keyframes slideDown { 0% { opacity: 0; transform: translateY(-80px); } 60% { opacity: 1; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
+
+    /* Telegram Banner */
+    .telegram-banner {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      background: #f2f2f2;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+      font-family: sans-serif;
+      z-index: 9999;
+      animation: slideUp 0.4s ease;
+    }
+    .telegram-banner a {
+      font-size: 15px;
+      color: #0088cc;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .telegram-banner a:hover { text-decoration: underline; }
+    .telegram-banner .close-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      margin-left: 10px;
+      color: #666;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  </style>
 </head>
+
 <body>
   <!-- Animated Dots Background -->
   <div id="dotsBackground"></div>
@@ -49,11 +343,15 @@
       <div class="nav-left">
         <a href="#" class="logo">The Unicorner Times</a>
       </div>
+
+      <!-- Hamburger button -->
       <div class="menu-btn" id="menu-btn">
         <span></span>
         <span></span>
         <span></span>
       </div>
+
+      <!-- Navigation -->
       <div class="nav-right" id="nav-links">
         <a href="https://unicorner.uz/about/">About</a>
         <a href="https://book.unicorner.uz">Books</a>
@@ -85,7 +383,7 @@
       </div>
     </div>
 
-    <!-- Blog Section -->
+    <!-- Blog -->
     <main class="blog-container" id="blog-container"></main>
 
     <!-- Footer -->
@@ -94,35 +392,97 @@
     </footer>
   </div>
 
-  <script src="script.js"></script>
   <script>
     // Splash screen with 20-minute cooldown
-window.addEventListener("load", () => {
-  const splash = document.getElementById("splash");
-  const content = document.getElementById("content");
-  const popup = document.getElementById("popupOverlay");
+    document.addEventListener("DOMContentLoaded", () => {
+      const splash = document.getElementById("splash");
+      const content = document.getElementById("content");
+      const popup = document.getElementById("popupOverlay");
 
-  const now = Date.now();
-  const lastShown = localStorage.getItem("splashLastShown");
-  const twentyMinutes = 20 * 60 * 1000; // 20 minutes in milliseconds
+      const now = Date.now();
+      const lastShown = localStorage.getItem("unicornerPopupTime");
+      const twentyMinutes = 20 * 60 * 1000;
 
-  if (!lastShown || now - lastShown > twentyMinutes) {
-    // Show splash
-    localStorage.setItem("splashLastShown", now);
-    setTimeout(() => {
-      splash.style.display = "none";
-      content.style.display = "block";
-      popup.style.display = "flex";
-    }, 1500);
-  } else {
-    // Skip splash
-    splash.style.display = "none";
-    content.style.display = "block";
-    popup.style.display = "none";
-  }
-});
+      if (!lastShown || now - lastShown > twentyMinutes) {
+        localStorage.setItem("unicornerPopupTime", now);
+        setTimeout(() => {
+          splash.style.display = "none";
+          content.style.display = "block";
+          setTimeout(() => { popup.classList.add("show"); }, 800);
+        }, 1500);
+      } else {
+        splash.style.display = "none";
+        content.style.display = "block";
+        popup.style.display = "none";
+      }
+    });
 
+    // Popup
+    function closePopup() { document.getElementById("popupOverlay").style.display = "none"; }
+
+    // Promo modal
+    const modal = document.getElementById("promoModal");
+    const closeBtn = document.querySelector("#promoModal .close");
+
+    function closeBanner() {
+      modal.style.display = "none";
+      localStorage.setItem("bannerShownTime", Date.now());
+    }
+
+    window.addEventListener("load", () => {
+      const lastShown = localStorage.getItem("bannerShownTime");
+      const now = Date.now();
+      const oneHour = 60 * 60 * 1000;
+      if (!lastShown || now - lastShown > oneHour) { modal.style.display = "flex"; }
+    });
+
+    closeBtn.onclick = closeBanner;
+
+    function showPromo() { modal.classList.add("show"); }
+    function closePromo() { modal.classList.remove("show"); }
+    function redirectPromo() { window.location.href = "https://vaqf.uz"; }
+
+    // Blog posts
+    const posts = [
+      { title: "How Small Habits Change Your Life", description: "Big results come from small daily improvements. Here's why.", link: "econ.html" },
+      { title: "Why Simplicity Wins", description: "Less is often more.", link: "#" },
+      { title: "The Power of Consistency", description: "Consistency beats intensity.", link: "#" }
+    ];
+
+    const container = document.getElementById("blog-container");
+    function showPosts() {
+      container.innerHTML = "";
+      posts.forEach(post => {
+        const div = document.createElement("div");
+        div.className = "post";
+        div.innerHTML = `<h2>${post.title}</h2><p>${post.description}</p><a href="${post.link}" class="read-more">Read more</a>`;
+        container.appendChild(div);
+      });
+    }
+    showPosts();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById("menu-btn");
+    const navLinks = document.getElementById("nav-links");
+    menuBtn.addEventListener("click", () => { navLinks.classList.toggle("show"); });
+
+    // Carousel
+    let index = 0;
+    const slides = document.querySelectorAll(".slide");
+    function showSlide() {
+      slides.forEach((s,i) => { s.style.display = (i === index) ? "block" : "none"; });
+      index = (index + 1) % slides.length;
+    }
+    showSlide();
+    setInterval(showSlide, 3000);
+
+    // Telegram banner after delay
+    window.addEventListener("load", () => {
+      setTimeout(() => { document.getElementById("telegramBanner").style.display = "flex"; }, 9000);
+    });
+
+    // Auto-show promo modal
+    window.addEventListener("load", () => { setTimeout(showPromo, 3825); });
   </script>
 </body>
 </html>
-
