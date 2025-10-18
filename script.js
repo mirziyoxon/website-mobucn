@@ -3,34 +3,6 @@ const menuBtn = document.getElementById("menu-btn");
 const navLinks = document.getElementById("nav-links");
 menuBtn.onclick = () => navLinks.classList.toggle("show");
 
-// Splash screen
-// Splash screen with 20-minute cooldown
-window.addEventListener("load", () => {
-  const splash = document.getElementById("splash");
-  const content = document.getElementById("content");
-  const popup = document.getElementById("popupOverlay");
-
-  const now = Date.now();
-  const lastShown = localStorage.getItem("splashLastShown");
-  const twentyMinutes = 20 * 60 * 1000; // 20 minutes in milliseconds
-
-  if (!lastShown || now - lastShown > twentyMinutes) {
-    // Show splash
-    localStorage.setItem("splashLastShown", now);
-    setTimeout(() => {
-      splash.style.display = "none";
-      content.style.display = "block";
-      popup.style.display = "flex";
-    }, 1500);
-  } else {
-    // Skip splash
-    splash.style.display = "none";
-    content.style.display = "block";
-    popup.style.display = "none";
-  }
-});
-
-
 // Popup
 function closePopup() { document.getElementById("popupOverlay").style.display = "none"; }
 
@@ -67,4 +39,5 @@ function showPost(i){ const post=posts[i]; container.innerHTML=`<div class="sing
 // Intersection animation
 const observer=new IntersectionObserver(entries=>{ entries.forEach(entry=>{ if(entry.isIntersecting){ entry.target.style.opacity=1; entry.target.style.transform="translateY(0)"; } }); },{threshold:0.2});
 document.querySelectorAll(".fade-in, .post").forEach(el=>observer.observe(el));
+
 
