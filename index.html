@@ -95,5 +95,34 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    // Splash screen with 20-minute cooldown
+window.addEventListener("load", () => {
+  const splash = document.getElementById("splash");
+  const content = document.getElementById("content");
+  const popup = document.getElementById("popupOverlay");
+
+  const now = Date.now();
+  const lastShown = localStorage.getItem("splashLastShown");
+  const twentyMinutes = 20 * 60 * 1000; // 20 minutes in milliseconds
+
+  if (!lastShown || now - lastShown > twentyMinutes) {
+    // Show splash
+    localStorage.setItem("splashLastShown", now);
+    setTimeout(() => {
+      splash.style.display = "none";
+      content.style.display = "block";
+      popup.style.display = "flex";
+    }, 1500);
+  } else {
+    // Skip splash
+    splash.style.display = "none";
+    content.style.display = "block";
+    popup.style.display = "none";
+  }
+});
+
+  </script>
 </body>
 </html>
+
