@@ -1,297 +1,87 @@
-/* General Styles */
+/* ===== GLOBAL STYLES ===== */
 body {
-  font-family: 'Georgia', serif;
+  font-family: "Arial", "Helvetica Neue", sans-serif;
   margin: 0;
-  background: #fff;
-  color: #222;
-  line-height: 1.6;
+  background: #111;
+  color: #fff;
+  overflow-x: hidden;
 }
 
-/* Hero Section */
-.hero {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 80px 20px 50px;
-}
-
-.hero-title {
-  font-size: 2.8rem;
-  margin-bottom: 10px;
-}
-
-.hero-subtitle {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 25px;
-}
-
-/* Subscribe Form */
-.subscribe-form {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.subscribe-form input {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  flex: 1;
-  max-width: 250px;
-}
-
-.subscribe-form button {
-  padding: 10px 18px;
-  font-size: 1rem;
-  background: #000;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.subscribe-form button:hover {
-  background: #333;
-}
-
-/* Blog Container */
-.blog-container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-
-.post {
-  padding: 25px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.post:hover {
-  background: #fafafa;
-}
-
-.post h2 {
-  margin-bottom: 10px;
-  font-size: 1.6rem;
-}
-
-.post p {
-  color: #555;
-  font-size: 1rem;
-}
-
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 20px;
-  background: #fafafa;
-  font-size: 0.9rem;
-  color: #777;
-}
-
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
-}
-
-.logo {
-  font-size: 1.4rem;
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
-}
-
-.nav-right {
-  display: flex;
-  gap: 20px;
-}
-
-.nav-right a {
-  text-decoration: none;
-  color: black;
-  font-size: 1rem;
-}
-
-.nav-right a:hover {
-  text-decoration: underline;
-}
-
-/* Menu Button (hidden on desktop) */
-.menu-btn {
-  display: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .nav-right {
-    display: none;
-    flex-direction: column;
-    background: white;
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 10px 20px;
-  }
-
-  .nav-right.show {
-    display: flex;
-  }
-
-  .menu-btn {
-    display: block;
-  }
-}
-
-/* Overlay background */
-.overlay {
+/* Animated Dots Background */
+#dotsBackground {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: none; /* hidden by default */
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 2px, transparent 2px);
+  background-size: 40px 40px;
+  z-index: -1;
+  animation: moveDots 10s linear infinite;
 }
-
-/* Popup box */
-.popup {
-  background: #fff;
-  padding: 20px 30px;
-  border-radius: 10px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-.popup h2 {
-  margin-top: 0;
-  font-size: 1.5rem;
-  color: #333;
-}
-
-.popup p {
-  font-size: 1rem;
-  color: #555;
-}
-
-.popup button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #333;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.popup button:hover {
-  background: #000;
-}
-
-footer {
-  background: linear-gradient(270deg, #ff7e5f, #feb47b, #86a8e7, #91eae4);
-  background-size: 800% 800%;
-  animation: gradientMove 15s ease infinite;
-}
-
-@keyframes gradientMove {
-  0% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
-  100% {background-position: 0% 50%;}
-}
-
-body {
-  margin: 0;
-  height: 100vh;
-  background: radial-gradient(circle at 20% 20%, rgba(0,0,0,0.08) 2px, transparent 3px),
-              radial-gradient(circle at 80% 30%, rgba(0,0,0,0.06) 2px, transparent 3px),
-              radial-gradient(circle at 50% 70%, rgba(0,0,0,0.05) 2px, transparent 3px),
-              linear-gradient(270deg, #ffffff, #f7f7f7, #ffffff);
-  background-size: 200px 200px, 200px 200px, 200px 200px, 600% 600%;
-  animation: moveDots 60s linear infinite, gradientShift 20s ease infinite;
-}
-
 @keyframes moveDots {
-  from { background-position: 0 0, 50px 50px, 100px 100px, 0% 50%; }
-  to   { background-position: 200px 200px, 250px 250px, 300px 300px, 100% 50%; }
+  from { background-position: 0 0; }
+  to { background-position: 40px 40px; }
 }
 
-@keyframes gradientShift {
-  0% { background-position: 0 0, 50px 50px, 100px 100px, 0% 50%; }
-  50% { background-position: 200px 200px, 250px 250px, 300px 300px, 100% 50%; }
-  100% { background-position: 0 0, 50px 50px, 100px 100px, 0% 50%; }
+/* Splash Loader */
+#splash { position: fixed; top:0; left:0; width:100%; height:100%; background:#fff; display:flex; justify-content:center; align-items:center; z-index:10000; }
+.loader { border:8px solid #f3f3f3; border-top:8px solid #333; border-radius:50%; width:60px; height:60px; animation: spin 1.2s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Navbar */
+.navbar { display:flex; justify-content:space-between; align-items:center; max-width:1000px; margin:0 auto; padding:15px 20px; border-bottom:1px solid #eee; background:#111; z-index:10; }
+.logo { font-family:"Brush Script MT", cursive; font-size:28px; text-decoration:none; color:#fff; font-weight:bold; }
+.logo:hover { color:#ff6600; }
+.nav-right { display:flex; gap:20px; }
+.nav-right a { text-decoration:none; color:#fff; font-size:1rem; }
+.nav-right a:hover { text-decoration:underline; }
+
+/* Hamburger Button */
+.menu-btn { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+.menu-btn span { width:25px; height:3px; background:#fff; border-radius:2px; transition:0.3s; }
+@media (max-width:768px) {
+  .menu-btn { display:flex; }
+  .nav-right { position:fixed; top:0; left:-250px; width:200px; height:100%; background:#111; flex-direction:column; padding:60px 20px; transition:left 0.3s ease; z-index:999; }
+  .nav-right.show { left:0; }
+  .nav-right a { margin:10px 0; font-size:1.1rem; }
 }
 
-<div class="carousel">
-  <div class="slides">
-    <img src="images/economics.jpg" class="slide active">
-    <img src="images/images.jpg" class="slide">
-    <img src="images/book3.jpg" class="slide">
-  </div>
-</div>
+/* Hero */
+.hero { max-width:700px; margin:0 auto; text-align:center; padding:80px 20px 50px; }
+.hero-title { font-size:2.2rem; margin-bottom:10px; }
+.hero-subtitle { font-size:1rem; color:#aaa; margin-bottom:20px; }
+.subscribe-form { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+.subscribe-form input { padding:10px; font-size:1rem; border:1px solid #ccc; flex:1; max-width:250px; }
+.subscribe-form button { padding:10px 18px; font-size:1rem; background:#ff6600; color:white; border:none; cursor:pointer; }
+.subscribe-form button:hover { background:#ffa347; }
 
-<style>
-.carousel {
+/* ===== BLOG SECTION ===== */
+.blog-container { max-width:900px; margin:50px auto; padding:0 20px; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:30px; }
+.post {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px) saturate(180%);
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.1);
+  padding:25px;
+  cursor:pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  opacity:0;
+  transform:translateY(20px);
+  animation: fadeUp 0.8s forwards;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
   position: relative;
-  width: 100%;
-  max-width: 700px;
-  margin: auto;
-  overflow: hidden;
-  border-radius: 12px;
 }
-.slides {
-  display: flex;
-  transition: transform 0.8s ease;
+.post:hover { transform:translateY(-10px); box-shadow:0 15px 40px rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.3);}
+.post h2 { margin-top:0; font-size:1.5rem; color:#fff; }
+.post p { color: rgba(255,255,255,0.8); margin-top:10px; font-size:1rem; line-height:1.5; }
+.single-post {
+  max-width:750px; margin:50px auto; background: rgba(255,255,255,0.1);
+  backdrop-filter:blur(20px) saturate(200%); border-radius:24px; padding:40px; box-shadow:0 20px 50px rgba(0,0,0,0.1);
 }
-.slide {
-  min-width: 100%;
-}
-</style>
+.single-post h2 { font-size:2rem; margin-bottom:15px; }
+.single-post p { font-size:1.1rem; line-height:1.8; }
+.single-post button { margin-top:25px; background:linear-gradient(90deg,#ff6600,#ffb347); color:#fff; border:none; border-radius:10px; padding:12px 24px; cursor:pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.single-post button:hover { transform:translateY(-3px); box-shadow:0 10px 25px rgba(255,102,0,0.4); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(40px); } to { opacity:1; transform:translateY(0); } }
 
-<script>
-let index = 0;
-const slides = document.querySelectorAll(".slide");
-
-function showSlide() {
-  slides.forEach((s,i) => {
-    s.style.display = (i === index) ? "block" : "none";
-  });
-  index = (index + 1) % slides.length;
-}
-
-showSlide();
-setInterval(showSlide, 3000); // change every 3s
-</script>
-
-body {
-  font-family: "Arial", "Helvetica Neue", "Segoe UI", "Roboto", "Noto Sans", "Liberation Sans", sans-serif;
-}
-
-
-.loader {
-  border: 8px solid #f3f3f3;
-  border-top: 8px solid #333;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  animation: spin 1.2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+/* Footer */
+footer { text-align:center; padding:15px; background:#111; font-size:0.9rem; color:#777; }
