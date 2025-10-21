@@ -594,25 +594,41 @@
 
     // Promo modal
     const modal = document.getElementById("promoModal");
-    const closeBtn = document.querySelector("#promoModal .close");
+const closeBtn = document.querySelector("#promoModal .close");
 
-    function closeBanner() {
-      modal.style.display = "none";
-      localStorage.setItem("bannerShownTime", Date.now());
-    }
+function closeBanner() {
+  modal.style.display = "none";
+  localStorage.setItem("bannerShownTime", Date.now());
+}
 
-    window.addEventListener("load", () => {
-      const lastShown = localStorage.getItem("bannerShownTime");
-      const now = Date.now();
-      const oneHour = 60 * 60 * 1000;
-      if (!lastShown || now - lastShown > oneHour) { modal.style.display = "flex"; }
-    });
+// Modalni faqat 1 soatda 1 marta ko‘rsatish
+window.addEventListener("load", () => {
+  const lastShown = localStorage.getItem("bannerShownTime");
+  const now = Date.now();
+  const oneHour = 60 * 60 * 1000;
+  if (!lastShown || now - lastShown > oneHour) {
+    modal.style.display = "flex";
+  }
+});
 
-    closeBtn.onclick = closeBanner;
+// "X" tugmasi bosilganda faqat yopilsin
+closeBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // redirect’ni to‘xtatadi
+  closeBanner();
+});
 
-    function showPromo() { modal.classList.add("show"); }
-    function closePromo() { modal.classList.remove("show"); }
-    function redirectPromo() { window.location.href = "https://vaqf.uz"; }
+// Fon bosilganda promo ochilmasin, faqat tashqi joy bosilganda yopilsin
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    closeBanner();
+  }
+});
+
+// Alohida funksiya — redirect faqat tugma orqali bo‘lishi kerak
+function redirectPromo() {
+  window.location.href = "https://vaqf.uz";
+}
+
 
     // Blog posts
     const posts = [
@@ -658,6 +674,7 @@
   </script>
 </body>
 </html>
+
 
 
 
