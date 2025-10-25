@@ -1,180 +1,372 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
   <title>Unicorner Times Journal</title>
+  <meta name="description" content="Unicorner Times — NYT / The New Yorker inspired mobile editorial prototype" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #fff;
-      color: #111;
+    /* ---------- Mobile-first editorial styles (NYT / New Yorker inspired) ---------- */
+    :root{
+      --bg:#ffffff;
+      --muted:#6b7280;
+      --accent:#0b3d91; /* deep blue accent */
+      --card:#fbfbfc;
+      --glass:rgba(255,255,255,0.6);
+      --max-width:720px;
+      --nav-width:78%;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      background:var(--bg);
+      color:#0b0b0b;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;justify-content:center;
     }
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: #fff;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
+    /* Desktop overlay: ask to open on mobile */
+    .wrapper{width:100%;max-width:var(--max-width);min-height:100vh}
+    .desktop-overlay{display:none}
+    @media(min-width:768px){
+      .wrapper{display:none}
+      .desktop-overlay{display:flex;align-items:center;justify-content:center;height:100vh;padding:24px;text-align:center;background:#fff}
+      .desktop-overlay .box{max-width:740px}
+      .desktop-overlay h1{font-family:Merriweather,serif;font-size:26px;margin:0 0 10px}
+      .desktop-overlay p{color:var(--muted);margin:0}
     }
 
-    .logo {
-      font-family: 'Merriweather', serif;
-      font-size: 20px;
-      font-weight: bold;
-    }
+    /* ---------- Header ---------- */
+    header.mast{position:sticky;top:0;z-index:60;background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));backdrop-filter:blur(6px) saturate(120%);border-bottom:1px solid #efefef}
+    .mast-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 14px}
+    .brand{display:flex;flex-direction:column}
+    .brand .title{font-family:Merriweather,serif;font-size:20px;line-height:1;margin:0}
+    .brand .subtitle{font-size:11px;color:var(--muted);margin-top:2px}
+    .mast-actions{display:flex;gap:8px;align-items:center}
+    .btn{background:none;border:0;padding:8px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer}
+    .btn:focus{outline:3px solid rgba(11,61,145,0.15);outline-offset:2px}
 
-    .menu-btn {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-    }
+    /* search overlay */
+    .search-bar{position:fixed;left:8px;right:8px;top:70px;z-index:70;background:rgba(255,255,255,0.98);border-radius:12px;padding:8px 12px;display:none;box-shadow:0 8px 30px rgba(10,10,10,0.08)}
+    .search-bar.open{display:block}
+    .search-input{width:100%;border:0;padding:10px;font-size:16px;border-radius:8px}
 
-    nav {
-      display: flex;
-      gap: 12px;
-    }
+    /* ---------- Right sliding nav (panel) ---------- */
+    .overlay-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.35);opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:80}
+    .overlay-backdrop.show{opacity:1;pointer-events:auto}
 
-    nav a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-    }
+    .sidepanel{position:fixed;top:0;right:-100%;height:100%;width:var(--nav-width);max-width:420px;background:linear-gradient(180deg,#fff,#fbfbfe);box-shadow:-18px 0 40px rgba(12,18,30,0.18);z-index:90;padding:18px;display:flex;flex-direction:column;gap:12px;transition:right .32s cubic-bezier(.22,.9,.3,1)}
+    .sidepanel.show{right:0}
+    .sidepanel .close{align-self:flex-end;background:none;border:0;font-size:26px;padding:6px;cursor:pointer}
+    .sidepanel nav{display:flex;flex-direction:column;gap:8px;padding-top:8px}
+    .sidepanel a{padding:12px 10px;border-radius:8px;text-decoration:none;color:#0b0b0b;font-weight:600}
+    .sidepanel a:hover{background:#f7f7fb}
 
-    /* Side navigation */
-    .side-nav {
-      position: fixed;
-      top: 0;
-      right: -70%;
-      width: 70%;
-      height: 100%;
-      background: #fff;
-      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-      transition: right 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-      z-index: 9999;
-    }
+    /* ---------- Hero / Featured ---------- */
+    main{padding-bottom:120px}
+    .hero{padding:14px 14px 18px}
+    .hero-card{border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(12,18,30,0.06)}
+    .hero img{width:100%;height:260px;object-fit:cover;display:block}
+    .hero-content{background:#fff;padding:14px}
+    .kicker{display:inline-block;color:var(--accent);font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid #eee}
+    .hero-title{font-family:Merriweather,serif;font-size:20px;margin:10px 0 8px}
+    .hero-excerpt{color:var(--muted);font-size:14px;line-height:1.45}
 
-    .side-nav.open {
-      right: 0;
-    }
+    /* ---------- Sections chips ---------- */
+    .sections{display:flex;gap:10px;padding:12px 12px;overflow:auto}
+    .chip{white-space:nowrap;padding:8px 12px;border-radius:999px;border:1px solid #eee;background:#fff;font-weight:600;font-size:13px}
 
-    .side-nav a {
-      padding: 10px 0;
-      text-decoration: none;
-      color: #111;
-      font-weight: 600;
-      border-bottom: 1px solid #eee;
-    }
+    /* ---------- Articles list ---------- */
+    .list{padding:6px 12px}
+    article.card{display:flex;gap:12px;padding:12px 6px;border-bottom:1px solid #f2f2f4;align-items:flex-start}
+    .thumb{width:100px;min-width:100px;height:72px;border-radius:10px;overflow:hidden;flex-shrink:0}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .meta{flex:1}
+    .meta h3{margin:0;font-family:Merriweather,serif;font-size:15px}
+    .meta .by{font-size:12px;color:var(--muted);margin-top:6px}
+    .meta p{margin:8px 0 0;color:var(--muted);font-size:13px}
 
-    .close-btn {
-      align-self: flex-end;
-      font-size: 24px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
+    /* ---------- Opinion card ---------- */
+    .opinion{margin:14px 12px;padding:12px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfbfe);box-shadow:0 6px 18px rgba(12,18,30,0.03)}
+    .opinion h4{margin:0 0 8px;font-family:Merriweather,serif}
+    .opinion p{margin:0;color:var(--muted)}
 
-    main {
-      padding: 16px;
-    }
+    /* ---------- Bottom nav ---------- */
+    .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:calc(100% - 28px);max-width:680px;background:rgba(255,255,255,0.98);border-radius:14px;display:flex;gap:6px;padding:8px;border:1px solid #eee;box-shadow:0 10px 30px rgba(10,10,10,0.06);justify-content:space-around;z-index:70}
+    .bottom-nav a{font-size:12px;text-decoration:none;color:#333;display:flex;flex-direction:column;align-items:center}
 
-    article {
-      margin-bottom: 24px;
-    }
+    /* small helpers */
+    .muted{color:var(--muted)}
+    a:focus{outline:3px solid rgba(11,61,145,0.12);outline-offset:3px}
 
-    article h2 {
-      font-family: 'Merriweather', serif;
-      margin: 0 0 8px;
-    }
+    /* animations */
+    .fade-up{animation:fadeUp .6s ease both}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-    article p {
-      margin: 0;
-      color: #555;
-    }
-
-    /* Desktop block */
-    @media (min-width: 768px) {
-      body::before {
-        content: 'Please open this site on mobile view.';
-        position: fixed;
-        inset: 0;
-        background: #fff;
-        color: #000;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 99999;
-      }
-      main, header {
-        display: none;
-      }
-    }
+    /* reduce motion respect */
+    @media (prefers-reduced-motion: reduce){*{animation:none;transition:none!important}}
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Unicorner Times Journal</div>
-    <button class="menu-btn" aria-label="Open menu">☰</button>
-  </header>
 
-  <div class="side-nav" id="sideNav">
-    <button class="close-btn" aria-label="Close menu">×</button>
-    <a href="#">Bosh sahifa</a>
-    <a href="#">Dunyo</a>
-    <a href="#">Iqtisodiyot</a>
-    <a href="#">Madaniyat</a>
-    <a href="#">Ilm-fan</a>
-    <a href="#">Fikr</a>
-    <a href="#">Tahririyat haqida</a>
+  <!-- Desktop overlay -->
+  <div class="desktop-overlay" role="dialog" aria-hidden="false">
+    <div class="box">
+      <h1>Unicorner Times — mobile view</h1>
+      <p class="muted">This prototype is optimized for mobile. Please open on a phone or narrow the browser window.</p>
+    </div>
   </div>
 
-  <main>
-    <article>
-      <h2>O‘zbekiston iqtisodiyoti yangi bosqichda</h2>
-      <p>So‘nggi islohotlar natijasida iqtisodiyotda o‘sish sur’atlari oshmoqda...</p>
-    </article>
-    <article>
-      <h2>Madaniyat: milliy san’at yangicha talqinda</h2>
-      <p>Yosh rassomlar va yozuvchilar yangi avlod san’atini shakllantirmoqda...</p>
-    </article>
-  </main>
+  <!-- Mobile wrapper (visible on mobile) -->
+  <div class="wrapper" role="document" aria-label="Unicorner Times Journal">
+
+    <!-- Header -->
+    <header class="mast" role="banner">
+      <div class="mast-inner">
+        <div class="brand">
+          <div class="title">Unicorner Times</div>
+          <div class="subtitle">Journal • Madaniyat • Iqtisodiyot</div>
+        </div>
+        <div class="mast-actions">
+          <button class="btn" id="searchBtn" aria-label="Open search">🔍</button>
+          <button class="btn" id="menuBtn" aria-haspopup="true" aria-controls="sidepanel" aria-expanded="false" aria-label="Open menu">☰</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Search overlay (hidden by default) -->
+    <div class="search-bar" id="searchBar" role="search" aria-hidden="true">
+      <input class="search-input" id="searchInput" type="search" placeholder="Maqola, muallif yoki mavzu qidiring…" aria-label="Search site" />
+    </div>
+
+    <!-- Right sliding nav + backdrop -->
+    <div class="overlay-backdrop" id="backdrop" tabindex="-1" aria-hidden="true"></div>
+    <aside class="sidepanel" id="sidepanel" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="panelTitle">
+      <button class="close" id="closePanel" aria-label="Close menu">×</button>
+      <h3 id="panelTitle" style="margin:0;font-family:Merriweather,serif;font-size:18px">Menyu</h3>
+      <nav aria-label="Primary navigation">
+        <a href="#">Bosh sahifa</a>
+        <a href="#">Dunyo</a>
+        <a href="#">Iqtisodiyot</a>
+        <a href="#">Madaniyat</a>
+        <a href="#">Fikr</a>
+        <a href="#">Ilm-fan</a>
+        <a href="#">Tahririyat haqida</a>
+      </nav>
+      <div style="margin-top:auto;padding-top:8px;border-top:1px dashed #eee">
+        <a href="#">Obuna bo'lish</a>
+        <a href="#">Kontakt</a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main>
+
+      <!-- Hero / Featured -->
+      <section class="hero fade-up" aria-labelledby="featuredLabel">
+        <div class="hero-card">
+          <img src="https://images.unsplash.com/photo-1508385082359-f3c9a40a7f56?q=80&w=1600&auto=format&fit=crop&s=placeholder" alt="Featured: city skyline at golden hour" loading="lazy">
+          <div class="hero-content">
+            <span class="kicker">FEATURED</span>
+            <h2 id="featuredLabel" class="hero-title">Qishloq va shahar: Madaniyatlar suhbati</h2>
+            <p class="hero-excerpt">Unicorner tahlili: shaharlashuv, an'analar va yangi iqtisodiy imkoniyatlar. Tanqidiy maqola va fotoserial.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sections chips -->
+      <div class="sections" role="navigation" aria-label="Sections">
+        <div class="chip">Bosh sahifa</div>
+        <div class="chip">Dunyo</div>
+        <div class="chip">Iqtisodiyot</div>
+        <div class="chip">Madaniyat</div>
+        <div class="chip">Fikr</div>
+        <div class="chip">Ilm-fan</div>
+      </div>
+
+      <!-- Opinion -->
+      <aside class="opinion" aria-labelledby="opLabel">
+        <h4 id="opLabel">Op-Ed: Yoshlarning kelajagi</h4>
+        <p>Yosh tadbirkorlar va ijtimoiy startaplar mamlakatni qanday o'zgartirayotgani haqida qisqacha fikr.</p>
+      </aside>
+
+      <!-- Articles list -->
+      <section class="list" aria-live="polite">
+
+        <article class="card" tabindex="0">
+          <div class="thumb" aria-hidden="true">
+            <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="Market scene" loading="lazy">
+          </div>
+          <div class="meta">
+            <h3>Mahalliy bozorda yangi tendensiyalar</h3>
+            <div class="by">By S. Nuriddin • Aug 18, 2025</div>
+            <p class="muted">Narxlar, ta'minot zanjirlari va kichik biznesga ta'siri haqida tafsilotlar.</p>
+          </div>
+        </article>
+
+        <article class="card" tabindex="0">
+          <div class="thumb" aria-hidden="true">
+            <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="Portrait of a writer" loading="lazy">
+          </div>
+          <div class="meta">
+            <h3>Adabiyot va shahar shamoli</h3>
+            <div class="by">By L. Karimova • Jul 04, 2025</div>
+            <p class="muted">Yangi romanlar, reportage va yozuv uslublari haqida suhbat.</p>
+          </div>
+        </article>
+
+        <article class="card" tabindex="0">
+          <div class="thumb" aria-hidden="true">
+            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="Economics chart" loading="lazy">
+          </div>
+          <div class="meta">
+            <h3>Iqtisodiy o'sish va raqamli transformatsiya</h3>
+            <div class="by">By A. Rakhimov • Jun 21, 2025</div>
+            <p class="muted">Raqamli xizmatlar va bank sektori: raqobat va regulyatsiya.</p>
+          </div>
+        </article>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom nav -->
+    <nav class="bottom-nav" role="navigation" aria-label="Primary">
+      <a href="#" aria-label="Home">🏠<span style="font-size:11px">Home</span></a>
+      <a href="#" aria-label="Saved">🔖<span style="font-size:11px">Saved</span></a>
+      <a href="#" aria-label="Write">✍️<span style="font-size:11px">Write</span></a>
+      <a href="#" aria-label="Listen">🔈<span style="font-size:11px">Listen</span></a>
+      <a href="#" aria-label="More">⚙️<span style="font-size:11px">More</span></a>
+    </nav>
+
+  </div>
 
   <script>
-    const menuBtn = document.querySelector('.menu-btn');
-    const sideNav = document.getElementById('sideNav');
-    const closeBtn = document.querySelector('.close-btn');
+    // Elements
+    const menuBtn = document.getElementById('menuBtn');
+    const sidepanel = document.getElementById('sidepanel');
+    const backdrop = document.getElementById('backdrop');
+    const closePanel = document.getElementById('closePanel');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchBar = document.getElementById('searchBar');
+    const searchInput = document.getElementById('searchInput');
 
-    menuBtn.addEventListener('click', () => {
-      sideNav.classList.add('open');
+    // Focusable elements inside panel for basic focus trap
+    function focusableInside(container){
+      return Array.from(container.querySelectorAll('a, button, [href], input, [tabindex]:not([tabindex="-1"])')).filter(el=>!el.hasAttribute('disabled'));
+    }
+
+    let lastFocusedBeforePanel = null;
+
+    function openPanel(){
+      lastFocusedBeforePanel = document.activeElement;
+      sidepanel.classList.add('show');
+      backdrop.classList.add('show');
+      sidepanel.setAttribute('aria-hidden','false');
+      menuBtn.setAttribute('aria-expanded','true');
+      backdrop.setAttribute('aria-hidden','false');
       document.body.style.overflow = 'hidden';
-    });
+      // focus first link in panel
+      const focusables = focusableInside(sidepanel);
+      if(focusables.length) focusables[0].focus();
+    }
 
-    closeBtn.addEventListener('click', () => {
-      sideNav.classList.remove('open');
+    function closePanelFn(){
+      sidepanel.classList.remove('show');
+      backdrop.classList.remove('show');
+      sidepanel.setAttribute('aria-hidden','true');
+      menuBtn.setAttribute('aria-expanded','false');
+      backdrop.setAttribute('aria-hidden','true');
       document.body.style.overflow = '';
-    });
+      if(lastFocusedBeforePanel) lastFocusedBeforePanel.focus();
+    }
 
-    // Close side nav by clicking outside
-    document.addEventListener('click', (e) => {
-      if (sideNav.classList.contains('open') && !sideNav.contains(e.target) && !menuBtn.contains(e.target)) {
-        sideNav.classList.remove('open');
-        document.body.style.overflow = '';
+    menuBtn.addEventListener('click', (e)=>{
+      openPanel();
+    });
+    closePanel.addEventListener('click', closePanelFn);
+
+    // close by clicking backdrop
+    backdrop.addEventListener('click', closePanelFn);
+
+    // close on ESC
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape'){
+        if(sidepanel.classList.contains('show')) closePanelFn();
+        if(searchBar.classList.contains('open')) toggleSearch(false);
       }
     });
+
+    // Basic keyboard trap while panel open
+    document.addEventListener('focus', (e)=>{
+      if(sidepanel.classList.contains('show')){
+        if(!sidepanel.contains(e.target)){
+          const focusables = focusableInside(sidepanel);
+          if(focusables.length) focusables[0].focus();
+        }
+      }
+    }, true);
+
+    // Search toggle
+    function toggleSearch(force){
+      const open = typeof force === 'boolean' ? force : !searchBar.classList.contains('open');
+      if(open){
+        searchBar.classList.add('open');
+        searchBar.setAttribute('aria-hidden','false');
+        searchInput.focus();
+      } else {
+        searchBar.classList.remove('open');
+        searchBar.setAttribute('aria-hidden','true');
+        searchInput.value = '';
+      }
+    }
+    searchBtn.addEventListener('click', ()=> toggleSearch());
+
+    // Simple search behavior (prototype)
+    searchInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        const q = searchInput.value.trim();
+        if(q) alert('Qidirilmoqda: "' + q + '"\n(Prototype search — static demo)');
+      }
+    });
+
+    // Make article cards keyboard-activatable
+    document.querySelectorAll('article.card').forEach(card=>{
+      card.addEventListener('click', ()=>{
+        const title = card.querySelector('h3')?.innerText || 'Maqola';
+        alert('Ochilmoqda: ' + title + '\n(Static prototype)');
+      });
+      card.addEventListener('keypress', (e)=>{
+        if(e.key === 'Enter') card.click();
+      });
+    });
+
+    // Prevent accidental overscroll on open panel for iOS
+    ['touchmove','wheel'].forEach(ev => {
+      backdrop.addEventListener(ev, (e)=>{ e.preventDefault(); }, {passive:false});
+    });
+
+    // Accessibility: announce when menu opens
+    const liveRegion = document.createElement('div');
+    liveRegion.setAttribute('aria-live','polite');
+    liveRegion.style.position = 'absolute';
+    liveRegion.style.left = '-9999px';
+    document.body.appendChild(liveRegion);
+    const observer = new MutationObserver(()=>{
+      if(sidepanel.classList.contains('show')) liveRegion.textContent = 'Menyu ochildi';
+      else liveRegion.textContent = 'Menyu yopildi';
+    });
+    observer.observe(sidepanel, {attributes:true, attributeFilter:['class']});
+
   </script>
 </body>
 </html>
-
-
