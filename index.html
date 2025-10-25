@@ -1,196 +1,256 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Unicorner Times</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>Unicorner Times Journal</title>
+  <meta name="description" content="Unicorner Times — zamonaviy jurnal uslubidagi mobil sayt (NYT/New Yorker inspired)" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      font-family: "Inter", system-ui, sans-serif;
-      margin: 0;
-      background: #fff;
-      color: #222;
+    /* ====== BASE (mobile-first) ====== */
+    :root{
+      --bg:#ffffff;
+      --muted:#70757a;
+      --accent:#0b4da2; /* deep blue accent reminiscent of newspapers */
+      --card:#f7f7f8;
+      --max-width:720px; /* keep content narrow like editorial sites */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:var(--bg);
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    .site{
+      width:100%;
+      max-width:var(--max-width);
+      min-height:100vh;
+      background:var(--bg);
     }
 
-    /* ===== Navbar ===== */
-    .navbar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      background: #fff;
-      border-bottom: 1px solid #eee;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    /* Desktop message: hide full site on wide screens */
+    .desktop-block{display:none}
+    @media(min-width:768px){
+      .site{display:none}
+      .desktop-block{display:flex}
+      .desktop-block{height:100vh;align-items:center;justify-content:center;padding:24px;text-align:center}
     }
 
-    .logo {
-      font-family: "Old English Text MT", "Cormorant Garamond", serif;
-      font-size: 1.8rem;
-      text-decoration: none;
-      color: #111;
-      transition: color 0.3s;
+    /* ===== Masthead ===== */
+    header.masthead{
+      padding:18px 16px 12px;
+      border-bottom:1px solid #ececec;
+      display:flex;align-items:flex-end;gap:12px;position:sticky;top:0;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));backdrop-filter:saturate(120%) blur(4px);z-index:40
     }
-    .logo:hover { color: #444; }
+    .brand{flex:1}
+    .brand h1{font-family:Merriweather, serif;margin:0;font-size:22px;letter-spacing:0.6px}
+    .brand p{margin:0;font-size:11px;color:var(--muted);font-weight:500}
+    .actions{display:flex;gap:10px}
+    .icon-btn{background:none;border:0;padding:6px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center}
 
-    /* Navigation Links */
-    .nav-links {
-      display: flex;
-      gap: 25px;
-      align-items: center;
-    }
+    /* ===== Hero / Featured ===== */
+    .hero{padding:14px 16px}
+    .hero-card{background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));border-radius:14px;overflow:hidden;box-shadow:0 6px 18px rgba(20,20,20,0.04)}
+    .hero figure{margin:0;position:relative}
+    .hero img{width:100%;height:220px;object-fit:cover;display:block}
+    .kicker{display:inline-block;padding:6px 10px;margin:12px 16px 8px;border-radius:999px;background:#fff;border:1px solid #eee;font-size:12px;color:var(--accent);font-weight:600}
+    .hero-title{font-family:Merriweather,serif;font-size:20px;margin:0 16px 10px}
+    .hero-excerpt{margin:0 16px 18px;color:var(--muted);font-size:14px;line-height:1.5}
 
-    .nav-links a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-    .nav-links a:hover { color: #000; }
+    /* ===== Sections ===== */
+    nav.sections{display:flex;gap:10px;padding:8px 16px;overflow:auto}
+    nav.sections a{white-space:nowrap;padding:8px 12px;border-radius:22px;border:1px solid #eee;background:#fff;font-size:13px;color:#222;text-decoration:none}
 
-    /* Language Selector */
-    .lang-select {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .lang-select a {
-      text-decoration: none;
-      color: #444;
-      font-weight: 500;
-      transition: 0.3s;
-    }
-    .lang-select a:hover { color: #000; }
+    /* ===== Article list ===== */
+    .list{padding:8px 16px 88px}
+    article.card{display:flex;gap:12px;padding:12px;border-bottom:1px solid #f0f0f0}
+    article.card:last-child{border-bottom:0}
+    .thumb{width:112px;min-width:112px;height:80px;border-radius:10px;overflow:hidden;flex-shrink:0}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .meta{flex:1}
+    .meta h3{margin:0;font-size:16px;font-family:Merriweather, serif}
+    .meta p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .byline{font-size:12px;color:var(--muted);margin-top:8px}
 
-    /* ===== Hamburger Button ===== */
-    .menu-btn {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      z-index: 1100;
-    }
-    .menu-btn span {
-      width: 26px;
-      height: 3px;
-      background: #111;
-      border-radius: 3px;
-      transition: all 0.3s ease;
-    }
+    /* ===== Opinion block (New Yorker vibe) ===== */
+    .opinion{background:var(--card);border-radius:12px;padding:12px;margin:18px 16px}
+    .opinion h4{margin:0 0 6px;font-family:Merriweather, serif}
+    .opinion p{margin:0;color:var(--muted);font-size:13px}
 
-    /* ===== Mobile Menu ===== */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: 70%;
-      height: 100%;
-      background: #fff;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-      transition: left 0.3s ease;
-      flex-direction: column;
-      padding: 70px 25px;
-      z-index: 1001;
-    }
+    /* ===== Sticky bottom nav ===== */
+    .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:calc(100% - 32px);max-width:640px;background:rgba(255,255,255,0.95);border-radius:14px;display:flex;gap:6px;padding:8px;border:1px solid #eee;box-shadow:0 10px 30px rgba(10,10,10,0.06);justify-content:space-around}
+    .bottom-nav a{font-size:12px;text-decoration:none;color:#333;display:flex;flex-direction:column;align-items:center}
 
-    .mobile-menu.show { left: 0; }
+    /* ===== Utilities ===== */
+    .muted{color:var(--muted)}
+    .center{text-align:center}
 
-    .mobile-menu a {
-      display: block;
-      margin-bottom: 18px;
-      font-size: 1.1rem;
-      color: #333;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .mobile-menu a:hover { color: #000; }
+    /* Accessibility focus */
+    a:focus{outline:3px solid #cfe0ff;outline-offset:2px}
 
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .menu-btn { display: flex; }
-      .lang-select { display: none; }
-    }
+    /* small animations */
+    .fade-up{animation:fadeUp .6s ease both}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    /* Small helper to hide on desktop view hint */
+    .desktop-hint{display:none}
+    @media(min-width:768px){.desktop-hint{display:block;font-size:14px;color:var(--muted)}}
   </style>
 </head>
 <body>
 
-  <!-- ===== Navbar ===== -->
-  <nav class="navbar">
-    <a href="#" class="logo">The Unicorner Times</a>
-
-    <div class="nav-links">
-      <a href="https://unicorner.uz/about/">About</a>
-      <a href="https://research.unicorner.uz">Research</a>
-      <a href="https://article.unicorner.uz">Articles</a>
-      <a href="https://book.unicorner.uz">Books</a>
-      <a href="https://unicorner.uz/publish">Publish</a>
-      <a href="https://unicorner.uz/download">Download</a>
+  <div class="desktop-block">
+    <div>
+      <h2>Unicorner Times Journal — mobile experience only</h2>
+      <p class="desktop-hint">Bu sahifa faqat mobil qurilmalar uchun optimallashtirilgan. Iltimos, telefon orqali oching yoki oynani toraytiring.</p>
     </div>
+  </div>
 
-    <div class="lang-select">
-      <a href="#">EN</a> | <a href="https://local.unicorner.uz">UZ</a>
-    </div>
+  <div class="site" role="document">
+    <header class="masthead">
+      <div class="brand">
+        <h1>Unicorner Times</h1>
+        <p>Journal • Madaniyat • Iqtisodiyot</p>
+      </div>
+      <div class="actions" aria-hidden="false">
+        <button class="icon-btn" title="Search" aria-label="Search" id="openSearch">🔍</button>
+        <button class="icon-btn" title="Menu" aria-label="Open menu" id="openMenu">☰</button>
+      </div>
+    </header>
 
-    <div class="menu-btn" id="menu-btn">
-      <span></span><span></span><span></span>
-    </div>
-  </nav>
+    <!-- Hero / Featured -->
+    <section class="hero fade-up" aria-labelledby="featured-label">
+      <div class="hero-card" role="article">
+        <figure>
+          <img src="https://images.unsplash.com/photo-1508385082359-f3c9a40a7f56?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Featured: city skyline at golden hour" loading="lazy">
+        </figure>
+        <div>
+          <span class="kicker">FEATURED</span>
+          <h2 class="hero-title" id="featured-label">Qishloq va shahar: Madaniyatlar suhbati</h2>
+          <p class="hero-excerpt">Unicorner tahlili: shaharlashuv, an'analar va yangi iqtisodiy imkoniyatlar. Tanqidiy maqola va fotoserial.</p>
+        </div>
+      </div>
+    </section>
 
-  <!-- ===== Mobile Menu ===== -->
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="https://unicorner.uz/about/">About</a>
-    <a href="https://research.unicorner.uz">Research</a>
-    <a href="https://article.unicorner.uz">Articles</a>
-    <a href="https://book.unicorner.uz">Books</a>
-    <a href="https://unicorner.uz/publish">Publish</a>
-    <a href="https://unicorner.uz/download">Download</a>
-    <hr style="border: none; border-top: 1px solid #ddd; margin: 15px 0;">
-    <a href="#">English</a>
-    <a href="https://local.unicorner.uz">Oʻzbekcha</a>
+    <!-- Sections -->
+    <nav class="sections" aria-label="Sections">
+      <a href="#">Bosh sahifa</a>
+      <a href="#">Dunyo</a>
+      <a href="#">Iqtisodiyot</a>
+      <a href="#">Madaniyat</a>
+      <a href="#">Fikr</a>
+      <a href="#">Ilm-fan</a>
+    </nav>
+
+    <!-- Opinion / Short essay -->
+    <aside class="opinion" aria-labelledby="op-label">
+      <h4 id="op-label">Op-Ed: Yoshlarning kelajagi</h4>
+      <p>Yosh tadbirkorlar va ijtimoiy startaplar mamlakatni qanday o'zgartirayotgani haqida qisqacha fikr. Kommentariya: sahifadagi audio versiyasini tinglang.</p>
+    </aside>
+
+    <!-- Article list -->
+    <main class="list" aria-live="polite">
+      <article class="card" tabindex="0">
+        <div class="thumb" aria-hidden="true">
+          <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=800&auto=format&fit=crop" alt="Market scene" loading="lazy">
+        </div>
+        <div class="meta">
+          <h3>Mahalliy bozorda yangi tendensiyalar</h3>
+          <p class="byline">By S. Nuriddin • Aug 18, 2025</p>
+          <p class="muted">Narxlar, ta'minot zanjirlari va kichik biznesga ta'siri haqida tafsilotlar.</p>
+        </div>
+      </article>
+
+      <article class="card" tabindex="0">
+        <div class="thumb" aria-hidden="true">
+          <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop" alt="Portrait of a writer" loading="lazy">
+        </div>
+        <div class="meta">
+          <h3>Adabiyot va shahar shamoli</h3>
+          <p class="byline">By L. Karimova • Jul 04, 2025</p>
+          <p class="muted">Yangi romanlar, reportage va yozuv uslublari haqida suhbat.</p>
+        </div>
+      </article>
+
+      <article class="card" tabindex="0">
+        <div class="thumb" aria-hidden="true">
+          <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=800&auto=format&fit=crop" alt="Economics chart" loading="lazy">
+        </div>
+        <div class="meta">
+          <h3>Iqtisodiy o'sish va raqamli transformatsiya</h3>
+          <p class="byline">By A. Rakhimov • Jun 21, 2025</p>
+          <p class="muted">Raqamli xizmatlar va bank sektori: raqobat va regulyatsiya.</p>
+        </div>
+      </article>
+
+      <!-- small newsletter CTA -->
+      <section style="margin:18px 0;padding:12px 14px;border-radius:12px;background:#fff;border:1px solid #f2f2f2;box-shadow:0 6px 12px rgba(10,10,10,0.03)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="flex:1">
+            <strong>Unicorner Weekly</strong>
+            <div class="muted" style="font-size:13px">Har yakshanba - tahlil va fotoserial.</div>
+          </div>
+          <button style="padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;font-weight:600">Obuna bo'lish</button>
+        </div>
+      </section>
+
+      <!-- small footer-like extras -->
+      <section style="margin-top:12px;padding:10px 0 60px;color:var(--muted);font-size:13px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a href="#">About</a> • <a href="#">Contact</a> • <a href="#">Archive</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- bottom nav -->
+    <nav class="bottom-nav" role="navigation" aria-label="Primary">
+      <a href="#">🏠<span style="font-size:11px">Home</span></a>
+      <a href="#">🔖<span style="font-size:11px">Saved</span></a>
+      <a href="#">✍️<span style="font-size:11px">Write</span></a>
+      <a href="#">🔈<span style="font-size:11px">Listen</span></a>
+      <a href="#">⚙️<span style="font-size:11px">More</span></a>
+    </nav>
+
   </div>
 
   <script>
-    // Mobile Menu Toggle
-    const menuBtn = document.getElementById("menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
-    let isOpen = false;
+    // Small interactive behaviors (all client-side, single file)
+    document.getElementById('openMenu').addEventListener('click', ()=>{
+      alert('Menu: Sections will appear here. (Prototype)')
+    })
+    document.getElementById('openSearch').addEventListener('click', ()=>{
+      const q = prompt('Search Unicorner Times')
+      if(q) alert('Search for: ' + q + '\n(This is a static prototype.)')
+    })
 
-    menuBtn.addEventListener("click", () => {
-      isOpen = !isOpen;
-      mobileMenu.classList.toggle("show");
-      menuBtn.classList.toggle("active");
+    // Keyboard-friendly: allow Enter to open article cards
+    document.querySelectorAll('article.card').forEach(a=>{
+      a.addEventListener('keypress', e=>{
+        if(e.key === 'Enter') alert('Open article: ' + a.querySelector('h3').innerText)
+      })
+      a.addEventListener('click', ()=>{
+        alert('Open article: ' + a.querySelector('h3').innerText)
+      })
+    })
 
-      // Animate hamburger
-      const spans = menuBtn.querySelectorAll("span");
-      if (isOpen) {
-        spans[0].style.transform = "rotate(45deg) translateY(8px)";
-        spans[1].style.opacity = "0";
-        spans[2].style.transform = "rotate(-45deg) translateY(-8px)";
-      } else {
-        spans[0].style.transform = "rotate(0)";
-        spans[1].style.opacity = "1";
-        spans[2].style.transform = "rotate(0)";
-      }
-    });
+    // Prevent zooming on mobile to keep layout tight
+    (function(){
+      try{document.addEventListener('gesturestart', function(e){e.preventDefault()})}catch(e){}
+    })();
 
-    // Close menu when clicking outside
-    window.addEventListener("click", (e) => {
-      if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
-        mobileMenu.classList.remove("show");
-        const spans = menuBtn.querySelectorAll("span");
-        spans[0].style.transform = spans[2].style.transform = "rotate(0)";
-        spans[1].style.opacity = "1";
-      }
-    });
+    // Small performance hint: use loading=lazy on images (already set)
   </script>
-
 </body>
 </html>
-
-
-
