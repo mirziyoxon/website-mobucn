@@ -174,16 +174,6 @@
   </style>
 </head>
 <body>
-<!-- EmailJS connection -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  // 🔹 STEP 1: Initialize EmailJS
-  (function() {
-    emailjs.init({
-      publicKey: "jc2imD9DTsfY_I-bf", // 👈 bu yerga public key'ingni yoz
-    });
-  })();
-</script>
 
 <!-- Sign Up Popup -->
 <div id="signup-popup" style="
@@ -206,71 +196,6 @@
     </form>
   </div>
 </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const popup = document.getElementById("signup-popup");
-  const form = document.getElementById("signup-form");
-
-  // Agar user allaqachon kirgan bo‘lsa, popup chiqmasin
-  const user = JSON.parse(localStorage.getItem("unicornerUser"));
-  if (user && user.email) {
-    popup.style.display = "none";
-    addProfileToMenu(user);
-  } else {
-    popup.style.display = "flex";
-  }
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const name = document.getElementById("signup-name").value.trim();
-    const email = document.getElementById("signup-email").value.trim();
-
-    if (!name || !email) return alert("Please fill in all fields.");
-
-    try {
-      // 🔹 STEP 2: EmailJS orqali Welcome Email yuborish
-      await emailjs.send("service_j0gqa0b", "template_1rgpl9j", {
-        to_email: email,
-        user_name: name,
-        message: `Hi ${name}, welcome to The Unicorner Times! 🗞️`,
-      });
-
-      // 🔹 STEP 3: Ma’lumotni localStorage’ga saqlash
-      localStorage.setItem("unicornerUser", JSON.stringify({ name, email }));
-
-      // 🔹 STEP 4: Popup’ni yopish va ismni chiqarish
-      popup.style.display = "none";
-      addProfileToMenu({ name, email });
-      alert("Welcome email sent successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Error sending email. Try again later.");
-    }
-  });
-
-  // 🔹 STEP 5: Navbar’ga user nomini qo‘shish
-  function addProfileToMenu(user) {
-    const mast = document.querySelector(".mast-inner");
-    if (!mast || document.getElementById("user-profile")) return;
-
-    const div = document.createElement("div");
-    div.id = "user-profile";
-    div.style.display = "flex";
-    div.style.alignItems = "center";
-    div.style.gap = "8px";
-    div.style.fontSize = "13px";
-    div.style.fontWeight = "600";
-
-    div.innerHTML = `
-      <span title="${user.email}" style="font-size:18px;">👤</span>
-      <span>${user.name.split(" ")[0]}</span>
-    `;
-
-    mast.insertBefore(div, mast.firstChild);
-  }
-});
-</script>
 
   <!-- Desktop overlay -->
   <div class="desktop-overlay" role="dialog" aria-hidden="false">
@@ -426,7 +351,8 @@ document.addEventListener("DOMContentLoaded", () => {
     </nav>
 
   </div>
-
+<!-- EmailJS connection -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
     // Elements
     const menuBtn = document.getElementById('menuBtn');
@@ -544,9 +470,78 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     observer.observe(sidepanel, {attributes:true, attributeFilter:['class']});
 
+// 🔹 STEP 1: Initialize EmailJS
+  (function() {
+    emailjs.init({
+      publicKey: "jc2imD9DTsfY_I-bf", // 👈 bu yerga public key'ingni yoz
+    });
+  })();
+    document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.getElementById("signup-popup");
+  const form = document.getElementById("signup-form");
+
+  // Agar user allaqachon kirgan bo‘lsa, popup chiqmasin
+  const user = JSON.parse(localStorage.getItem("unicornerUser"));
+  if (user && user.email) {
+    popup.style.display = "none";
+    addProfileToMenu(user);
+  } else {
+    popup.style.display = "flex";
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("signup-name").value.trim();
+    const email = document.getElementById("signup-email").value.trim();
+
+    if (!name || !email) return alert("Please fill in all fields.");
+
+    try {
+      // 🔹 STEP 2: EmailJS orqali Welcome Email yuborish
+      await emailjs.send("service_j0gqa0b", "template_1rgpl9j", {
+        to_email: email,
+        user_name: name,
+        message: `Hi ${name}, welcome to The Unicorner Times! 🗞️`,
+      });
+
+      // 🔹 STEP 3: Ma’lumotni localStorage’ga saqlash
+      localStorage.setItem("unicornerUser", JSON.stringify({ name, email }));
+
+      // 🔹 STEP 4: Popup’ni yopish va ismni chiqarish
+      popup.style.display = "none";
+      addProfileToMenu({ name, email });
+      alert("Welcome email sent successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Error sending email. Try again later.");
+    }
+  });
+
+  // 🔹 STEP 5: Navbar’ga user nomini qo‘shish
+  function addProfileToMenu(user) {
+    const mast = document.querySelector(".mast-inner");
+    if (!mast || document.getElementById("user-profile")) return;
+
+    const div = document.createElement("div");
+    div.id = "user-profile";
+    div.style.display = "flex";
+    div.style.alignItems = "center";
+    div.style.gap = "8px";
+    div.style.fontSize = "13px";
+    div.style.fontWeight = "600";
+
+    div.innerHTML = `
+      <span title="${user.email}" style="font-size:18px;">👤</span>
+      <span>${user.name.split(" ")[0]}</span>
+    `;
+
+    mast.insertBefore(div, mast.firstChild);
+  }
+});
   </script>
 </body>
 </html>
+
 
 
 
