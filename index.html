@@ -611,31 +611,10 @@ document.getElementById('logout-btn').addEventListener('click', () => {
   profileInfo.style.display = 'none'; // hide profile box
   popup.style.display = 'flex'; // show signup popup again
 });
-
-  // 🔹 STEP 5: Navbar’ga user nomini qo‘shish
-  function addProfileToMenu(user) {
-    const mast = document.querySelector(".mast-inner");
-    if (!mast || document.getElementById("user-profile")) return;
-
-    const div = document.createElement("div");
-    div.id = "user-profile";
-    div.style.display = "flex";
-    div.style.alignItems = "center";
-    div.style.gap = "8px";
-    div.style.fontSize = "13px";
-    div.style.fontWeight = "600";
-
-    div.innerHTML = `
-      <span title="${user.email}" style="font-size:18px;">👤</span>
-      <span>${user.name.split(" ")[0]}</span>
-    `;
-
-    mast.insertBefore(div, mast.firstChild);
-  }
-});
   </script>
 </body>
 </html>
+
 
 
 
