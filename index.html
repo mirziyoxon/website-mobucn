@@ -171,30 +171,113 @@
       margin-top: 24px;
     }
 
+
+    /* Popup */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+.popup-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 350px;
+  width: 90%;
+}
+.popup-content h2 {
+  color: #007bff;
+}
+.popup-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.popup-content button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.popup-content button:hover {
+  background: #0056b3;
+}
+
+/* Profile icon */
+.profile-icon {
+  position: fixed;
+  top: 20px;
+  right: 25px;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* Profile info box */
+.profile-info {
+  display: none;
+  position: fixed;
+  top: 60px;
+  right: 25px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  width: 220px;
+}
   </style>
 </head>
 <body>
 
-<!-- Sign Up Popup -->
-<div id="signup-popup" style="
-  position:fixed; inset:0; background:rgba(0,0,0,0.6);
-  display:flex; justify-content:center; align-items:center;
-  z-index:9999; backdrop-filter:blur(3px);">
-  <div style="
-    background:#fff; padding:24px 20px; border-radius:14px;
-    width:90%; max-width:360px; text-align:center; box-shadow:0 8px 28px rgba(0,0,0,0.1)">
-    <h2 style="font-family:Merriweather,serif;margin-bottom:6px;">Join Unicorner</h2>
-    <p style="font-size:14px;color:#555;margin-bottom:18px;">Sign up to get our weekly stories.</p>
+<!-- Popup (Sign Up Modal) -->
+<div id="signup-popup" class="popup">
+  <div class="popup-content">
+    <h2>Join Us 🎉</h2>
+    <p>Sign up to become part of our community</p>
     <form id="signup-form">
-      <input id="signup-name" type="text" placeholder="Full name" required
-        style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:8px;font-size:15px;">
-      <input id="signup-email" type="email" placeholder="Email address" required
-        style="width:100%;padding:10px;margin-bottom:14px;border:1px solid #ddd;border-radius:8px;font-size:15px;">
-      <button type="submit" style="
-        background:#0b3d91;color:#fff;border:0;border-radius:10px;
-        padding:10px 16px;width:100%;font-size:16px;cursor:pointer;">Sign Up</button>
+      <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+      <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+      <input type="email" id="email" name="email" placeholder="Email Address" required>
+      <button type="submit">Sign Up</button>
     </form>
   </div>
+</div>
+
+<!-- Header Profile Icon -->
+<header>
+  <div id="profile-icon" class="profile-icon" title="Your Info">
+    👤
+  </div>
+</header>
+
+<!-- Profile Info Box -->
+<!-- Profile Info Box -->
+<div id="profile-info" class="profile-info">
+  <h3>Your Info</h3>
+  <p><strong>Name:</strong> <span id="userName"></span></p>
+  <p><strong>Email:</strong> <span id="userEmail"></span></p>
+  <button id="logout-btn" style="
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 8px;
+    width: 100%;
+  ">Log out</button>
 </div>
 
   <!-- Desktop overlay -->
@@ -470,52 +553,64 @@
     });
     observer.observe(sidepanel, {attributes:true, attributeFilter:['class']});
 
-// 🔹 STEP 1: Initialize EmailJS
-  (function() {
-    emailjs.init({
-      publicKey: "jc2imD9DTsfY_I-bf", // 👈 bu yerga public key'ingni yoz
-    });
-  })();
-    document.addEventListener("DOMContentLoaded", () => {
-  const popup = document.getElementById("signup-popup");
-  const form = document.getElementById("signup-form");
+// 🔑 YOUR KEYS
+  const PUBLIC_KEY = "jc2imD9DTsfY_I-bf";
+  const SERVICE_ID = "service_j0gqa0b";
+  const TEMPLATE_ID = "template_1rgpl9j";
 
-  // Agar user allaqachon kirgan bo‘lsa, popup chiqmasin
-  const user = JSON.parse(localStorage.getItem("unicornerUser"));
-  if (user && user.email) {
-    popup.style.display = "none";
-    addProfileToMenu(user);
-  } else {
-    popup.style.display = "flex";
+  emailjs.init(PUBLIC_KEY);
+
+  const popup = document.getElementById('signup-popup');
+  const form = document.getElementById('signup-form');
+  const profileIcon = document.getElementById('profile-icon');
+  const profileInfo = document.getElementById('profile-info');
+
+  // 🔹 Popup birinchi ochilganda chiqadi (faqat foydalanuvchi hali sign up qilmagan bo‘lsa)
+  window.addEventListener('load', () => {
+    const savedUser = localStorage.getItem('user');
+    if (!savedUser) popup.style.display = 'flex';
+    else showProfile(JSON.parse(savedUser));
+  });
+
+  // 🔹 Form yuborilganda
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+
+    // Email yuborish
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+      name: firstName + " " + lastName,
+      email: email
+    }).then(() => {
+      alert("✅ Welcome email sent!");
+      const user = { firstName, lastName, email };
+      localStorage.setItem('user', JSON.stringify(user));
+      popup.style.display = 'none';
+      showProfile(user);
+    }, (error) => {
+      alert("❌ Error: " + JSON.stringify(error));
+    });
+  });
+
+  // 🔹 Profilni ko‘rsatish
+  function showProfile(user) {
+    document.getElementById('userName').textContent = user.firstName + " " + user.lastName;
+    document.getElementById('userEmail').textContent = user.email;
   }
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const name = document.getElementById("signup-name").value.trim();
-    const email = document.getElementById("signup-email").value.trim();
-
-    if (!name || !email) return alert("Please fill in all fields.");
-
-    try {
-      // 🔹 STEP 2: EmailJS orqali Welcome Email yuborish
-      await emailjs.send("service_j0gqa0b", "template_1rgpl9j", {
-        to_email: email,
-        user_name: name,
-        message: `Hi ${name}, welcome to The Unicorner Times! 🗞️`,
-      });
-
-      // 🔹 STEP 3: Ma’lumotni localStorage’ga saqlash
-      localStorage.setItem("unicornerUser", JSON.stringify({ name, email }));
-
-      // 🔹 STEP 4: Popup’ni yopish va ismni chiqarish
-      popup.style.display = "none";
-      addProfileToMenu({ name, email });
-      alert("Welcome email sent successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Error sending email. Try again later.");
-    }
+  // 🔹 Profil icon bosilganda ma’lumotlarni ko‘rsatish / yopish
+  profileIcon.addEventListener('click', () => {
+    profileInfo.style.display = profileInfo.style.display === 'block' ? 'none' : 'block';
   });
+  // 🔹 Log out button
+document.getElementById('logout-btn').addEventListener('click', () => {
+  localStorage.removeItem('user');  // remove saved user data
+  profileInfo.style.display = 'none'; // hide profile box
+  popup.style.display = 'flex'; // show signup popup again
+});
 
   // 🔹 STEP 5: Navbar’ga user nomini qo‘shish
   function addProfileToMenu(user) {
@@ -541,6 +636,7 @@
   </script>
 </body>
 </html>
+
 
 
 
