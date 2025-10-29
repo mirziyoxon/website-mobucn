@@ -237,6 +237,46 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   width: 220px;
 }
+    .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .meta {
+    padding: 1rem;
+  }
+
+  .by {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.4rem;
+  }
+
+  .muted {
+    color: #777;
+    font-size: 0.95rem;
+  }
   </style>
 </head>
 <body>
@@ -337,7 +377,7 @@
           <img src="https://images.unsplash.com/photo-1508385082359-f3c9a40a7f56?q=80&w=1600&auto=format&fit=crop&s=placeholder" alt="Featured: city skyline at golden hour" loading="lazy">
           <div class="hero-content">
             <span class="kicker">FEATURED</span>
-            <h2 id="featuredLabel" class="hero-title">Qishloq va shahar: Madaniyatlar suhbati</h2>
+            <h2 id="featuredLabel" class="hero-title">Unshakable Inside: Madaniyatlar suhbati</h2>
             <p class="hero-excerpt">Unicorner tahlili: shaharlashuv, an'analar va yangi iqtisodiy imkoniyatlar. Tanqidiy maqola va fotoserial.</p>
           </div>
         </div>
@@ -362,17 +402,18 @@
       <!-- Articles list -->
       <section class="list" aria-live="polite">
 
-        <article class="card" tabindex="0">
-          <div class="thumb" aria-hidden="true">
-            <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="Market scene" loading="lazy">
-          </div>
-          <div class="meta">
-            <h3>Mahalliy bozorda yangi tendensiyalar</h3>
-            <div class="by">By S. Nuriddin • Aug 18, 2025</div>
-            <p class="muted">Narxlar, ta'minot zanjirlari va kichik biznesga ta'siri haqida tafsilotlar.</p>
-          </div>
-        </article>
-
+        <a href="https//unicorner.uz/why-we-welieve-we-believe-15674" class="card-link">
+  <article class="card" tabindex="0">
+    <div class="thumb" aria-hidden="true">
+      <img src="https://unsplash.com/photos/purple-and-yellow-unk-neon-light-signage-Wqr4EJSxgHk" alt="Market scene" loading="lazy">
+    </div>
+    <div class="meta">
+      <h3>Why we believe we believe?</h3>
+      <div class="by">By M. Nurutdinov • Aug 18, 2025</div>
+      <p class="muted">The Strength Behind Every Great Dream: Belief.</p>
+    </div>
+  </article>
+</a>
         <article class="card" tabindex="0">
           <div class="thumb" aria-hidden="true">
             <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&auto=format&fit=crop&s=placeholder" alt="Portrait of a writer" loading="lazy">
@@ -612,6 +653,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
   </script>
 </body>
 </html>
+
 
 
 
